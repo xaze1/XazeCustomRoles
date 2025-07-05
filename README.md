@@ -2,7 +2,7 @@ Simply at it to the depencendy folder of LabApi
 
 ## How to use
 To create a Custom Role, simply do it like this:
-```csharp
+```c#
 public class ExampleRole : CustomRoleBase
 {
     public override float MaxHealth => 120;
@@ -21,7 +21,7 @@ public class ExampleRole : CustomRoleBase
   
 If you wish the role to have a Custom Name, simply use the `ICustomNameRole` interface like so:
 *This will change the Player's Custom Info, not the actual Role Name*
-```csharp
+```c#
 public class ExampleRole : CustomRoleBase, ICustomNameRole
 {
     public override float MaxHealth => 120;
@@ -47,7 +47,7 @@ This will set the players role to the Custom Role
 
 You can also override the Custom Roles Team and Faction, if you want it to count as something differently  
 Example:
-```csharp
+```c#
 public override CustomTeam Team => CustomTeam.ChaosInsurgency;
 public override CustomFaction Faction => CustomFaction.FoundationStaff;
 ```  
