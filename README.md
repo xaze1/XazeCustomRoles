@@ -1,6 +1,6 @@
 Simply at it to the depencendy folder of LabApi
 
-### How to use
+## How to use
 To create a Custom Role, simply do it like this:
 ```csharp
 public class ExampleRole : CustomRoleBase
