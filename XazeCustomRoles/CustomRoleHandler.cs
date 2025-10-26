@@ -12,10 +12,19 @@ namespace XazeCustomRoles
 {
     public class CustomRoleHandler : CustomEventsHandler
     {
-        public static readonly CustomRoleHandler Instance = new();
+        public static readonly CustomRoleHandler Instance;
+        static CustomRoleHandler()
+        {
+            Instance = new();
+        }
 
         public override void OnPlayerChangingRole(PlayerChangingRoleEventArgs ev)
         {
+            if (ev?.Player == null)
+            {
+                return;
+            }
+
             if (ev.NewRole == ev.OldRole.RoleTypeId)
             {
                 return;
@@ -26,11 +35,21 @@ namespace XazeCustomRoles
 
         public override void OnPlayerDying(PlayerDyingEventArgs ev)
         {
+            if (ev?.Player == null)
+            {
+                return;
+            }
+
             CustomRoleManager.DisableRole(ev.Player);
         }
 
         public override void OnPlayerLeft(PlayerLeftEventArgs ev)
         {
+            if (ev?.Player == null)
+            {
+                return;
+            }
+            
             CustomRoleManager.DisableRole(ev.Player);
         }
     }

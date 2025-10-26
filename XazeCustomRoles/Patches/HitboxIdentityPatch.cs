@@ -10,7 +10,7 @@ using XazeAPI.API.AudioCore.FakePlayers;
 
 namespace XazeCustomRoles.Patches
 {
-    [HarmonyPatchCategory(CustomRoleManager.CustomRolesPatchGroup)]
+    [HarmonyPatchCategory(Loader.CustomRolesPatchGroup)]
     [HarmonyPatch(typeof(HitboxIdentity), nameof(HitboxIdentity.IsEnemy), [typeof(ReferenceHub), typeof(ReferenceHub)])]
     public class HitboxIdentityPatch
     {

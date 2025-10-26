@@ -9,60 +9,103 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
+using Mirror;
 using NorthwoodLib.Pools;
 using PlayerRoles;
 using PlayerStatsSystem;
 
 namespace XazeCustomRoles.Patches;
 
-[HarmonyPatchCategory(CustomRoleManager.CustomRolesPatchGroup)]
+[HarmonyPatchCategory(Loader.CustomRolesPatchGroup)]
 [HarmonyPatch(typeof(AttackerDamageHandler), nameof(AttackerDamageHandler.ProcessDamage))]
 public class AttackerHandlerPatch
 {
     public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
-        var newInstructions = ListPool<CodeInstruction>.Shared.Rent(instructions);
+        // Rent a list from the shared pool, initialized with old instructions
+        var code = ListPool<CodeInstruction>.Shared.Rent(instructions);
+        var newInstructions = ListPool<CodeInstruction>.Shared.Rent();
 
-        // Locate the call to HitboxIdentity.IsEnemy(RoleTypeId, RoleTypeId)
-        int index = newInstructions.FindIndex(i =>
-            i.opcode == OpCodes.Call &&
-            i.operand is MethodInfo mi &&
-            mi.Name == "IsEnemy" &&
-            mi.DeclaringType?.Name == "HitboxIdentity"
-        );
+        var customMethod = AccessTools.Method(typeof(AttackerHandlerPatch), nameof(AttackerHandlerPatch.CustomIsEnemyCheck));
 
-        if (index != -1)
+        int startIndex = -1;
+        int endIndex = -1;
+
+        // Find start and end of the block to replace
+        for (int i = 0; i < code.Count - 1; i++)
         {
-            // Remove original IsEnemy check and its operands
-            // Backtrack to ldarg.0 (4 instructions before IsEnemy)
-            int start = index - 4;
-
-            newInstructions.RemoveRange(start, 6); // ldarg.0, call Attacker, ldfld Role, ldarg.1, call GetRoleId, call IsEnemy
-
-            // Also remove the brtrue.s (branch if IsEnemy was true)
-            if (newInstructions[start].opcode == OpCodes.Brtrue_S)
-                newInstructions.RemoveAt(start);
-
-            // Inject custom check instead
-            newInstructions.InsertRange(start, new[]
+            if (startIndex == -1 &&
+                code[i].opcode == OpCodes.Ldarg_1 && // loading ply
+                code[i + 1].Calls(AccessTools.PropertyGetter(typeof(NetworkIdentity), nameof(NetworkIdentity.netId))))
             {
-                new CodeInstruction(OpCodes.Ldarg_0), // __instance
-                new CodeInstruction(OpCodes.Ldarg_1), // ply
-                new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(AttackerHandlerPatch), nameof(CustomIsEnemyCheck))),
-                new CodeInstruction(OpCodes.Brtrue_S, newInstructions[start + 1].operand), // mimic original jump if check is true
-            });
+                startIndex = i;
+            }
+
+            if (startIndex != -1 &&
+                code[i].Calls(AccessTools.Method(typeof(StandardDamageHandler), nameof(StandardDamageHandler.ProcessDamage))))
+            {
+                endIndex = i - 1;
+                break;
+            }
         }
 
-        foreach (var code in newInstructions)
-            yield return code;
+        if (startIndex == -1 || endIndex == -1)
+        {
+            UnityEngine.Debug.LogError("[Harmony] Could not locate conditional block in AttackerDamageHandler.ProcessDamage.");
 
+            foreach (var ci in code)
+                yield return ci;
+
+            ListPool<CodeInstruction>.Shared.Return(code);
+            ListPool<CodeInstruction>.Shared.Return(newInstructions);
+            yield break;
+        }
+
+        // Copy instructions before replaced block
+        for (int i = 0; i < startIndex; i++)
+            newInstructions.Add(code[i]);
+
+        // Insert call to our custom method:
+        // if (!CustomDamagePatch.CustomDamageHandlerPatch(this, ply)) return;
+
+        var continueLabel = new Label();
+
+        newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0)); // this
+        newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_1)); // ply
+        newInstructions.Add(new CodeInstruction(OpCodes.Call, customMethod));
+        newInstructions.Add(new CodeInstruction(OpCodes.Brtrue_S, continueLabel));
+        newInstructions.Add(new CodeInstruction(OpCodes.Ret));
+
+        // Mark label at instruction after replaced block
+        code[endIndex + 1].labels.Add(continueLabel);
+
+        // Copy remaining instructions
+        for (int i = endIndex + 1; i < code.Count; i++)
+            newInstructions.Add(code[i]);
+
+        // Yield all instructions
+        foreach (var ci in newInstructions)
+            yield return ci;
+
+        // Return lists to pool
+        ListPool<CodeInstruction>.Shared.Return(code);
         ListPool<CodeInstruction>.Shared.Return(newInstructions);
     }
 
-    public static void CustomIsEnemyCheck(AttackerDamageHandler __instance, ReferenceHub ply)
+    public static bool CustomIsEnemyCheck(AttackerDamageHandler __instance, ReferenceHub ply)
     {
-        if (__instance is ExplosionDamageHandler or Scp018DamageHandler &&
-            !HitboxIdentity.IsEnemy(__instance.Attacker.Role, ply.GetRoleId()))
+        if (ply.networkIdentity.netId == __instance.Attacker.NetId || __instance.ForceFullFriendlyFire)
+        {
+            if (!__instance.AllowSelfDamage && !__instance.ForceFullFriendlyFire)
+            {
+                __instance.Damage = 0f;
+                return false; // skip processing
+            }
+
+            __instance.IsSuicide = true;
+        }
+        else if (__instance is ExplosionDamageHandler or Scp018DamageHandler &&
+                 !HitboxIdentity.IsEnemy(__instance.Attacker.Role, ply.GetRoleId()))
         {
             __instance.Damage *= AttackerDamageHandler._ffMultiplier;
             __instance.IsFriendlyFire = true;
@@ -72,6 +115,7 @@ public class AttackerHandlerPatch
             __instance.Damage *= AttackerDamageHandler._ffMultiplier;
             __instance.IsFriendlyFire = true;
         }
-    }
 
+        return true;
+    }
 }

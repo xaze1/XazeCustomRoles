@@ -14,6 +14,7 @@ using LabApi.Features.Wrappers;
 using MEC;
 using PlayerRoles;
 using UnityEngine;
+using XazeAPI.API;
 using XazeAPI.API.AudioCore.FakePlayers;
 using XazeAPI.API.Enums;
 using XazeAPI.API.Events;
@@ -24,29 +25,6 @@ namespace XazeCustomRoles
 {
     public class CustomRoleManager : MonoBehaviour
     {
-        public const string CustomRolesPatchGroup = "XAZE-CustomRoles";
-        static CustomRoleManager()
-        {
-            Harmony harmonyPatch = new("Xaze-Patches-CustomRoles");
-            harmonyPatch.PatchCategory(CustomRolesPatchGroup);
-            
-            XazeEvents.PreventHitmarker += OnPreventHitmarker;
-            
-            CustomHandlersManager.RegisterEventsHandler(CustomRoleHandler.Instance);
-
-            ReferenceHub.OnPlayerAdded += ctx => Timing.CallDelayed(0.1f, () =>
-            {
-                if (ctx.Mode == CentralAuth.ClientInstanceMode.Host ||
-                    ctx.Mode == CentralAuth.ClientInstanceMode.DedicatedServer ||
-                    AudioManager.ActiveFakes.Contains(ctx))
-                {
-                    return;
-                }
-                
-                ctx.gameObject.AddComponent<CustomRoleManager>();
-            });
-        }
-        
         public static readonly Dictionary<uint, CustomRoleManager> ActiveManagers = new();
 
         public bool _hubSet;
@@ -128,7 +106,7 @@ namespace XazeCustomRoles
 
         public static void DisableRole(Player plr)
         {
-            if (!TryGet(plr.ReferenceHub, out var manager))
+            if (!TryGet(plr?.ReferenceHub, out var manager))
             {
                 return;
             }
@@ -248,17 +226,6 @@ namespace XazeCustomRoles
         public static bool TryGet(ReferenceHub hub, out CustomRoleManager manager)
         {
             return ActiveManagers.TryGetValue(hub.netId, out manager);
-        }
-
-        private static void OnPreventHitmarker(PreventHitmarkerEvent args)
-        {
-            if (!TryGet(args.Target, out var manager) || manager.CurrentRole is not IHitmarkerPreventer preventer ||
-                !preventer.TryPreventHitmarker(args.DamageHandler))
-            {
-                return;
-            }
-
-            args.IsAllowed = false;
         }
     }
 }
