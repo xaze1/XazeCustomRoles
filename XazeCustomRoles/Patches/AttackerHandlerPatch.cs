@@ -105,12 +105,7 @@ public class AttackerHandlerPatch
             __instance.IsSuicide = true;
         }
         else if (__instance is ExplosionDamageHandler or Scp018DamageHandler &&
-                 !HitboxIdentity.IsEnemy(__instance.Attacker.Role, ply.GetRoleId()))
-        {
-            __instance.Damage *= AttackerDamageHandler._ffMultiplier;
-            __instance.IsFriendlyFire = true;
-        }
-        else if (!HitboxIdentity.IsEnemy(__instance.Attacker.Hub, ply))
+                 !HitboxIdentity.IsEnemy(__instance.Attacker.Role, ply.GetRoleId()) || !HitboxIdentity.IsEnemy(__instance.Attacker.Hub, ply))
         {
             __instance.Damage *= AttackerDamageHandler._ffMultiplier;
             __instance.IsFriendlyFire = true;

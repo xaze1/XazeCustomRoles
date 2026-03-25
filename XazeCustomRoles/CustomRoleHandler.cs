@@ -7,6 +7,7 @@
 
 using LabApi.Events.Arguments.PlayerEvents;
 using LabApi.Events.CustomHandlers;
+using XazeCustomRoles.Features;
 
 namespace XazeCustomRoles
 {

@@ -93,7 +93,24 @@
     <ItemGroup>
         <Compile Include="CustomRoleBase.cs" />
         <Compile Include="CustomRoleHandler.cs" />
-        <Compile Include="CustomRoleManager.cs" />
+        <Compile Include="Extensions\TeamAndFactionExtensions.cs" />
+        <Compile Include="Features\CustomRoleManager.cs" />
+        <Compile Include="Features\CustomTeamBase.cs" />
+        <Compile Include="Features\Factions\FlamingosFaction.cs" />
+        <Compile Include="Features\Factions\FoundationEnemyFaction.cs" />
+        <Compile Include="Features\Factions\FoundationStaffFaction.cs" />
+        <Compile Include="Features\Factions\SCPFaction.cs" />
+        <Compile Include="Features\Factions\UnclassifiedFaction.cs" />
+        <Compile Include="Features\Teams\ChaosInsurgencyTeam.cs" />
+        <Compile Include="Features\Teams\ClassDTeam.cs" />
+        <Compile Include="Features\Teams\DeadTeam.cs" />
+        <Compile Include="Features\Teams\FlamingosTeam.cs" />
+        <Compile Include="Features\Teams\FoundationForcesTeam.cs" />
+        <Compile Include="Features\Teams\OtherAliveTeam.cs" />
+        <Compile Include="Features\Teams\ScientistsTeam.cs" />
+        <Compile Include="Features\Teams\SCPsTeam.cs" />
+        <Compile Include="Interfaces\ICustomFaction.cs" />
+        <Compile Include="Interfaces\ICustomTeam.cs" />
         <Compile Include="Interfaces\ISpawnBroadcast.cs" />
         <Compile Include="Loader.cs" />
         <Compile Include="Patches\AttackerHandlerPatch.cs" />

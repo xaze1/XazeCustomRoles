@@ -13,6 +13,7 @@ using PlayerRoles.FirstPersonControl.Spawnpoints;
 using PlayerStatsSystem;
 using XazeAPI.API.Enums;
 using XazeAPI.API.Extensions;
+using XazeCustomRoles.Features.Teams;
 using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles
@@ -20,8 +21,8 @@ namespace XazeCustomRoles
     public abstract class CustomRoleBase : IHealthbarRole
     {
         // Team
-        public virtual CustomTeam Team => CustomTeam.OtherAlive;
-        public virtual CustomFaction Faction => Team.GetFaction();
+        public virtual ICustomTeam Team => new OtherAliveTeam();
+        public virtual ICustomFaction Faction => Team.Faction;
 
         // Role
         public string RoleName
@@ -53,20 +54,20 @@ namespace XazeCustomRoles
 
 
         // Methods
-        public virtual void Init(Player Owner, PlayerRoleBase roleBase)
+        public virtual void Init(Player owner, PlayerRoleBase roleBase)
         {
             BaseRole = roleBase;
-            Owner.MaxHealth = MaxHealth;
-            Owner.Health = MaxHealth;
+            owner.MaxHealth = MaxHealth;
+            owner.Health = MaxHealth;
 
             if (this is ISpawnBroadcast spawn)
             {
-                Owner.SendBroadcast(spawn.SpawnBroadcast, spawn.BroadcastDuration, Broadcast.BroadcastFlags.Normal, spawn.ClearPrevious);
+                owner.SendBroadcast(spawn.SpawnBroadcast, spawn.BroadcastDuration, Broadcast.BroadcastFlags.Normal, spawn.ClearPrevious);
             }
 
             if (this is ICustomNameRole)
             {
-                Owner.CustomInfo = RoleName;
+                owner.CustomInfo = RoleName;
             }
         }
 
@@ -74,7 +75,7 @@ namespace XazeCustomRoles
         {
             if (this is ICustomNameRole)
             {
-                Owner.CustomInfo = null;
+                Owner?.CustomInfo = null;
             }
         }
     }

@@ -7,21 +7,18 @@
 
 using System;
 using System.Collections.Generic;
-using HarmonyLib;
 using InventorySystem;
-using LabApi.Events.CustomHandlers;
 using LabApi.Features.Wrappers;
-using MEC;
 using PlayerRoles;
 using UnityEngine;
 using XazeAPI.API;
 using XazeAPI.API.AudioCore.FakePlayers;
-using XazeAPI.API.Enums;
-using XazeAPI.API.Events;
-using XazeAPI.API.Extensions;
 using XazeAPI.API.Helpers;
+using XazeCustomRoles.Extensions;
+using XazeCustomRoles.Features.Teams;
+using XazeCustomRoles.Interfaces;
 
-namespace XazeCustomRoles
+namespace XazeCustomRoles.Features
 {
     public class CustomRoleManager : MonoBehaviour
     {
@@ -84,7 +81,7 @@ namespace XazeCustomRoles
             if (spawnFlags.HasFlag(RoleSpawnFlags.AssignInventory))
             {
                 Inventory inventory = plr.Inventory;
-                foreach (KeyValuePair<ItemType, ushort> keyValuePair in roleInstance.StartingInventory.Ammo)
+                foreach (var keyValuePair in roleInstance.StartingInventory.Ammo)
                 {
                     inventory.ServerAddAmmo(keyValuePair.Key, keyValuePair.Value);
                 }
@@ -95,11 +92,11 @@ namespace XazeCustomRoles
                 }
             }
 
-            if (spawnFlags.HasFlag(RoleSpawnFlags.UseSpawnpoint) && roleInstance.Spawnpoint != null && roleInstance.Spawnpoint.TryGetSpawnpoint(out Vector3 spawnPos, out float spawnRot))
-            {
-                plr.Position = spawnPos;
-                plr.LookRotation = new Vector2(0, spawnRot);
-            }
+            if (!spawnFlags.HasFlag(RoleSpawnFlags.UseSpawnpoint) || roleInstance.Spawnpoint == null ||
+                !roleInstance.Spawnpoint.TryGetSpawnpoint(out Vector3 spawnPos, out float spawnRot)) return;
+            
+            plr.Position = spawnPos;
+            plr.LookRotation = new Vector2(0, spawnRot);
         }
 
         public static void SetRole<T>(ReferenceHub hub, RoleChangeReason reason, RoleSpawnFlags spawnFlags) where T : CustomRoleBase => SetRole<T>(Player.Get(hub), reason, spawnFlags);
@@ -138,16 +135,16 @@ namespace XazeCustomRoles
             manager._curRole = null;
         }
 
-        public static CustomTeam GetTeam(ReferenceHub player)
+        public static ICustomTeam GetTeam(ReferenceHub player)
         {
             if (player == null || AudioManager.ActiveFakes.Contains(player))
             {
-                return CustomTeam.Dead;
+                return new DeadTeam();
             }
 
             if (ActiveManagers.TryGetValue(player.netId, out var manager) && manager._anySet)
             {
-                return manager.CurrentRole.Team;
+                return manager.CurrentRole?.Team?? new DeadTeam();
             }
 
             return player.GetTeam().ToCustomTeam();
@@ -158,37 +155,14 @@ namespace XazeCustomRoles
             return IsEnemy(GetTeam(attacker), GetTeam(target));
         }
 
-        public static bool IsEnemy(CustomTeam attacker, CustomTeam target)
+        public static bool IsEnemy(ICustomTeam attacker, ICustomTeam target)
         {
-            if (attacker.HasFlag(CustomTeam.Dead) || target.HasFlag(CustomTeam.Dead))
+            if (attacker is DeadTeam || target is DeadTeam)
             {
                 return false;
             }
-
-            if (attacker.HasFlag(CustomTeam.SCPs) && target.HasFlag(CustomTeam.SCPs))
-            {
-                return false;
-            }
-
-            if (attacker.HasFlag(CustomTeam.Personnel) ^ target.HasFlag(CustomTeam.Personnel))
-            {
-                return true;
-            }
-
-            CustomFaction aFaction = attacker.GetFaction();
-            CustomFaction tFaction = target.GetFaction();
-
-            if (aFaction.HasFlag(CustomFaction.Daybreak) ^ tFaction.HasFlag(CustomFaction.Daybreak))
-            {
-                return true;
-            }
-
-            if (aFaction.HasFlag(CustomFaction.NullEvent) ^ tFaction.HasFlag(CustomFaction.NullEvent))
-            {
-                return true;
-            }
-
-            return aFaction != tFaction;
+            
+            return attacker.IsHostileTo(target) || target.IsHostileTo(attacker);
         }
 
         private void Awake()

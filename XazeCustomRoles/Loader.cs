@@ -14,6 +14,9 @@ using MEC;
 using XazeAPI.API;
 using XazeAPI.API.AudioCore.FakePlayers;
 using XazeAPI.API.Events;
+using XazeCustomRoles.Features;
+using XazeCustomRoles.Features.Factions;
+using XazeCustomRoles.Features.Teams;
 
 namespace XazeCustomRoles;
 
@@ -23,9 +26,6 @@ public class Loader : Plugin
 
     public override void Enable()
     {
-        new CustomRoleManager();
-        new CustomRoleHandler();
-        
         CustomHandlersManager.RegisterEventsHandler(CustomRoleHandler.Instance);
         try
         {
