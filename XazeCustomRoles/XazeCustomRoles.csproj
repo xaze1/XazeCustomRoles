@@ -1,135 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
-            Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{05BDD1DF-AD73-4819-90E7-688F02AC7DE0}</ProjectGuid>
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup Label="Project Settings">
+        <TargetFramework>net48</TargetFramework>
+        <LangVersion>latest</LangVersion>
         <OutputType>Library</OutputType>
-        <AppDesignerFolder>Properties</AppDesignerFolder>
+
         <RootNamespace>XazeCustomRoles</RootNamespace>
         <AssemblyName>XazeCustomRoles</AssemblyName>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-        <LangVersion>latest</LangVersion>
-        <FileAlignment>512</FileAlignment>
+
+        <Nullable>enable</Nullable>
+
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <PropertyGroup Label="Variables">
+        <ScpSlDir>C:\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server</ScpSlDir>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="0Harmony, Version=2.3.6.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\Lib.Harmony.2.3.6\lib\net48\0Harmony.dll</HintPath>
+
+    <ItemGroup Label="SCP:SL References">
+        <Reference Include="Assembly-CSharp" Publicize="true">
+            <HintPath>$(ScpSlDir)\SCPSL_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
-        <Reference Include="Assembly-CSharp">
-          <HintPath>..\..\..\OneDrive\Desktop\publiciser\LabApi-References\Assembly-CSharp-Publicized.dll</HintPath>
-        </Reference>
+
         <Reference Include="Assembly-CSharp-firstpass">
-          <HintPath>..\..\..\OneDrive\Desktop\publiciser\LabApi-References\Assembly-CSharp-firstpass-Publicized.dll</HintPath>
+            <HintPath>$(ScpSlDir)\SCPSL_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
         </Reference>
+
         <Reference Include="CommandSystem.Core">
-          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
+            <HintPath>$(ScpSlDir)\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
         </Reference>
+
         <Reference Include="LabApi">
-          <HintPath>..\..\..\OneDrive\Desktop\publiciser\LabApi-References\LabApi-Publicized.dll</HintPath>
+            <HintPath>$(ScpSlDir)\SCPSL_Data\Managed\LabApi.dll</HintPath>
         </Reference>
+
         <Reference Include="Mirror">
-          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Mirror.dll</HintPath>
+            <HintPath>$(ScpSlDir)\SCPSL_Data\Managed\Mirror.dll</HintPath>
         </Reference>
-        <Reference Include="mscorlib" />
-        <Reference Include="NorthwoodLib">
-          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\NorthwoodLib.dll</HintPath>
-        </Reference>
-        <Reference Include="Pooling">
-          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Pooling.dll</HintPath>
-        </Reference>
-        <Reference Include="Snake">
-          <HintPath>..\..\..\OneDrive\Desktop\publiciser\LabApi-References\Snake-Publicized.dll</HintPath>
-        </Reference>
-        <Reference Include="System"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Drawing">
-          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\System.Drawing.dll</HintPath>
-        </Reference>
-        <Reference Include="System.Drawing.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Drawing.Common.10.0.0-preview.5.25277.114\lib\net462\System.Drawing.Common.dll</HintPath>
-        </Reference>
-        <Reference Include="System.Drawing.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Drawing.Primitives.4.3.0\lib\net45\System.Drawing.Primitives.dll</HintPath>
-        </Reference>
-        <Reference Include="System.Xml"/>
+
         <Reference Include="UnityEngine">
-          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.dll</HintPath>
+            <HintPath>$(ScpSlDir)\SCPSL_Data\Managed\UnityEngine.dll</HintPath>
         </Reference>
+
         <Reference Include="UnityEngine.CoreModule">
-          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+            <HintPath>$(ScpSlDir)\SCPSL_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
-        <Reference Include="UnityEngine.PhysicsModule">
-          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+
+        <Reference Include="NorthwoodLib">
+            <HintPath>$(ScpSlDir)\SCPSL_Data\Managed\NorthwoodLib.dll</HintPath>
         </Reference>
+
+        <Reference Include="Pooling">
+            <HintPath>$(ScpSlDir)\SCPSL_Data\Managed\Pooling.dll</HintPath>
+        </Reference>
+
         <Reference Include="XazeAPI">
           <HintPath>..\..\XazeAPI\XazeAPI\bin\Release\net48\XazeAPI.dll</HintPath>
         </Reference>
     </ItemGroup>
-    <ItemGroup>
-        <Compile Include="CustomRoleBase.cs" />
-        <Compile Include="CustomRoleHandler.cs" />
-        <Compile Include="Extensions\TeamAndFactionExtensions.cs" />
-        <Compile Include="Features\CustomRoleManager.cs" />
-        <Compile Include="Features\CustomTeamBase.cs" />
-        <Compile Include="Features\FactionComparer.cs" />
-        <Compile Include="Features\Factions\BaseGameFaction.cs" />
-        <Compile Include="Features\Factions\FlamingosFaction.cs" />
-        <Compile Include="Features\Factions\FoundationEnemyFaction.cs" />
-        <Compile Include="Features\Factions\FoundationStaffFaction.cs" />
-        <Compile Include="Features\Factions\SCPFaction.cs" />
-        <Compile Include="Features\Factions\UnclassifiedFaction.cs" />
-        <Compile Include="Features\TeamComparer.cs" />
-        <Compile Include="Features\Teams\ChaosInsurgencyTeam.cs" />
-        <Compile Include="Features\Teams\ClassDTeam.cs" />
-        <Compile Include="Features\Teams\DeadTeam.cs" />
-        <Compile Include="Features\Teams\FlamingosTeam.cs" />
-        <Compile Include="Features\Teams\FoundationForcesTeam.cs" />
-        <Compile Include="Features\Teams\OtherAliveTeam.cs" />
-        <Compile Include="Features\Teams\ScientistsTeam.cs" />
-        <Compile Include="Features\Teams\SCPsTeam.cs" />
-        <Compile Include="Interfaces\ICustomFaction.cs" />
-        <Compile Include="Interfaces\ICustomTeam.cs" />
-        <Compile Include="Interfaces\ISpawnBroadcast.cs" />
-        <Compile Include="Loader.cs" />
-        <Compile Include="Patches\AttackerHandlerPatch.cs" />
-        <Compile Include="Patches\HitboxIdentityPatch.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs"/>
+    <ItemGroup Label="IDE References">
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild">
+            <Version>0.4.3</Version>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Lib.Harmony">
+            <Version>2.3.3</Version>
+        </PackageReference>
+        <PackageReference Include="Newtonsoft.Json">
+            <Version>13.0.3</Version>
+        </PackageReference>
+        <PackageReference Include="YamlDotNet">
+            <Version>11.0.1</Version>
+        </PackageReference>
     </ItemGroup>
-    <ItemGroup>
-      <None Include="packages.config" />
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
-
 </Project>
