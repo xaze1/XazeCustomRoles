@@ -14,9 +14,8 @@ using MEC;
 using XazeAPI.API;
 using XazeAPI.API.AudioCore.FakePlayers;
 using XazeAPI.API.Events;
+using XazeAPI.API.Events.Handler;
 using XazeCustomRoles.Features;
-using XazeCustomRoles.Features.Factions;
-using XazeCustomRoles.Features.Teams;
 
 namespace XazeCustomRoles;
 
@@ -38,7 +37,7 @@ public class Loader : Plugin
             {
                 if (ctx.Mode == CentralAuth.ClientInstanceMode.Host ||
                     ctx.Mode == CentralAuth.ClientInstanceMode.DedicatedServer ||
-                    AudioManager.ActiveFakes.Contains(ctx))
+                    FakeManager.ActiveFakes.Contains(ctx))
                 {
                     return;
                 }

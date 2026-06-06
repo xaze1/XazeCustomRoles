@@ -11,7 +11,6 @@ using InventorySystem;
 using LabApi.Features.Wrappers;
 using PlayerRoles;
 using UnityEngine;
-using XazeAPI.API;
 using XazeAPI.API.AudioCore.FakePlayers;
 using XazeAPI.API.Helpers;
 using XazeCustomRoles.Extensions;
@@ -80,16 +79,18 @@ namespace XazeCustomRoles.Features
 
             if (spawnFlags.HasFlag(RoleSpawnFlags.AssignInventory))
             {
+                plr.ClearItems();
                 Inventory inventory = plr.Inventory;
                 foreach (var keyValuePair in roleInstance.StartingInventory.Ammo)
                 {
-                    inventory.ServerAddAmmo(keyValuePair.Key, keyValuePair.Value);
+                    inventory.ServerSetAmmo(keyValuePair.Key, keyValuePair.Value);
                 }
 
                 foreach (ItemType item in roleInstance.StartingInventory.Items)
                 {
                     plr.GiveFirearmWithAttachments(item);
                 }
+                roleInstance.GiveCustomItems();
             }
 
             if (!spawnFlags.HasFlag(RoleSpawnFlags.UseSpawnpoint) || roleInstance.Spawnpoint == null ||
@@ -137,7 +138,7 @@ namespace XazeCustomRoles.Features
 
         public static ICustomTeam GetTeam(ReferenceHub player)
         {
-            if (player == null || AudioManager.ActiveFakes.Contains(player))
+            if (player == null || FakeManager.ActiveFakes.Contains(player))
             {
                 return new DeadTeam();
             }
@@ -149,10 +150,26 @@ namespace XazeCustomRoles.Features
 
             return player.GetTeam().ToCustomTeam();
         }
+        
+        public static ICustomTeam GetTeam(Player player) => GetTeam(player.ReferenceHub);
 
+        public static bool IsEnemy(Player attacker, Player target) => IsEnemy(attacker.ReferenceHub, target.ReferenceHub);
+        public static bool IsEnemy(Player attacker, ICustomTeam target) => IsEnemy(attacker.ReferenceHub, target);
+        public static bool IsEnemy(ICustomTeam attacker, Player target) => IsEnemy(attacker, target.ReferenceHub);
+        
         public static bool IsEnemy(ReferenceHub attacker, ReferenceHub target)
         {
             return IsEnemy(GetTeam(attacker), GetTeam(target));
+        }
+        
+        public static bool IsEnemy(ReferenceHub attacker, ICustomTeam target)
+        {
+            return IsEnemy(GetTeam(attacker), target);
+        }
+        
+        public static bool IsEnemy(ICustomTeam attacker, ReferenceHub target)
+        {
+            return IsEnemy(attacker, GetTeam(target));
         }
 
         public static bool IsEnemy(ICustomTeam attacker, ICustomTeam target)

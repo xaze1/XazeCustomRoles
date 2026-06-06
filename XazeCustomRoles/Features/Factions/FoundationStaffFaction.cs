@@ -11,9 +11,10 @@ using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features.Factions;
 
-public class FoundationStaffFaction : ICustomFaction
+public class FoundationStaffFaction : BaseGameFaction
 {
-    public string DisplayName => "Foundation Staff";
-    public string FactionId => nameof(Faction.FoundationStaff);
-    public Faction BaseGameFaction =>  Faction.FoundationStaff;
+    public override string DisplayName => "Foundation Staff";
+    public override string FactionId => nameof(Faction.FoundationStaff);
+    public override int WinningWeight => 1;
+    public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.FacilityForces;
 }

@@ -26,7 +26,7 @@ public class AttackerHandlerPatch
         var code = ListPool<CodeInstruction>.Shared.Rent(instructions);
         var newInstructions = ListPool<CodeInstruction>.Shared.Rent();
 
-        var customMethod = AccessTools.Method(typeof(AttackerHandlerPatch), nameof(AttackerHandlerPatch.CustomIsEnemyCheck));
+        var customMethod = AccessTools.Method(typeof(AttackerHandlerPatch), nameof(CustomIsEnemyCheck));
 
         int startIndex = -1;
         int endIndex = -1;
@@ -41,12 +41,12 @@ public class AttackerHandlerPatch
                 startIndex = i;
             }
 
-            if (startIndex != -1 &&
-                code[i].Calls(AccessTools.Method(typeof(StandardDamageHandler), nameof(StandardDamageHandler.ProcessDamage))))
-            {
-                endIndex = i - 1;
-                break;
-            }
+            if (startIndex == -1 ||
+                !code[i].Calls(AccessTools.Method(typeof(StandardDamageHandler),
+                    nameof(StandardDamageHandler.ProcessDamage)))) continue;
+            
+            endIndex = i - 1;
+            break;
         }
 
         if (startIndex == -1 || endIndex == -1)

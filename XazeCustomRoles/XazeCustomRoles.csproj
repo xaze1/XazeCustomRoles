@@ -46,20 +46,20 @@
           <HintPath>..\..\..\OneDrive\Desktop\publiciser\LabApi-References\Assembly-CSharp-firstpass-Publicized.dll</HintPath>
         </Reference>
         <Reference Include="CommandSystem.Core">
-          <HintPath>..\..\..\OneDrive\Desktop\publiciser\LabApi-References\CommandSystem.Core-Publicized.dll</HintPath>
+          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
         </Reference>
         <Reference Include="LabApi">
           <HintPath>..\..\..\OneDrive\Desktop\publiciser\LabApi-References\LabApi-Publicized.dll</HintPath>
         </Reference>
         <Reference Include="Mirror">
-          <HintPath>..\..\..\OneDrive\Desktop\publiciser\LabApi-References\Mirror-Publicized.dll</HintPath>
+          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Mirror.dll</HintPath>
         </Reference>
         <Reference Include="mscorlib" />
         <Reference Include="NorthwoodLib">
-          <HintPath>..\..\..\OneDrive\Desktop\publiciser\LabApi-References\NorthwoodLib-Publicized.dll</HintPath>
+          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\NorthwoodLib.dll</HintPath>
         </Reference>
         <Reference Include="Pooling">
-          <HintPath>..\..\..\OneDrive\Desktop\publiciser\LabApi-References\Pooling-Publicized.dll</HintPath>
+          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Pooling.dll</HintPath>
         </Reference>
         <Reference Include="Snake">
           <HintPath>..\..\..\OneDrive\Desktop\publiciser\LabApi-References\Snake-Publicized.dll</HintPath>
@@ -87,7 +87,7 @@
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
         <Reference Include="XazeAPI">
-          <HintPath>..\..\XazeAPI\XazeAPI\bin\Release\XazeAPI.dll</HintPath>
+          <HintPath>..\..\XazeAPI\XazeAPI\bin\Release\net48\XazeAPI.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
@@ -96,11 +96,14 @@
         <Compile Include="Extensions\TeamAndFactionExtensions.cs" />
         <Compile Include="Features\CustomRoleManager.cs" />
         <Compile Include="Features\CustomTeamBase.cs" />
+        <Compile Include="Features\FactionComparer.cs" />
+        <Compile Include="Features\Factions\BaseGameFaction.cs" />
         <Compile Include="Features\Factions\FlamingosFaction.cs" />
         <Compile Include="Features\Factions\FoundationEnemyFaction.cs" />
         <Compile Include="Features\Factions\FoundationStaffFaction.cs" />
         <Compile Include="Features\Factions\SCPFaction.cs" />
         <Compile Include="Features\Factions\UnclassifiedFaction.cs" />
+        <Compile Include="Features\TeamComparer.cs" />
         <Compile Include="Features\Teams\ChaosInsurgencyTeam.cs" />
         <Compile Include="Features\Teams\ClassDTeam.cs" />
         <Compile Include="Features\Teams\DeadTeam.cs" />

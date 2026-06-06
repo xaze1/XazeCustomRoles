@@ -11,9 +11,10 @@ using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features.Factions;
 
-public class SCPFaction : ICustomFaction
+public class SCPFaction : BaseGameFaction
 {
-    public string DisplayName => "SCP";
-    public string FactionId => nameof(Faction.SCP);
-    public Faction BaseGameFaction => Faction.SCP;
+    public override string DisplayName => "SCP";
+    public override string FactionId => nameof(Faction.SCP);
+    public override int WinningWeight => 2;
+    public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.Anomalies;
 }

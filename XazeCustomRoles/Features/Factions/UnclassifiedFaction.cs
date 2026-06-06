@@ -11,9 +11,10 @@ using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features.Factions;
 
-public class UnclassifiedFaction : ICustomFaction
+public class UnclassifiedFaction : BaseGameFaction
 {
-    public string DisplayName => "Unclassified";
-    public string FactionId => nameof(Faction.Unclassified);
-    public Faction BaseGameFaction => Faction.Unclassified;
+    public override string DisplayName => "Unclassified";
+    public override string FactionId => nameof(Faction.Unclassified);
+    public override int WinningWeight => 0;
+    public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.Draw;
 }

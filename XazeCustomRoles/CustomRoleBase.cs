@@ -7,12 +7,12 @@
 
 using System.Drawing;
 using InventorySystem;
+using JetBrains.Annotations;
+using LabApi.Events.Arguments.PlayerEvents;
 using LabApi.Features.Wrappers;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl.Spawnpoints;
 using PlayerStatsSystem;
-using XazeAPI.API.Enums;
-using XazeAPI.API.Extensions;
 using XazeCustomRoles.Features.Teams;
 using XazeCustomRoles.Interfaces;
 
@@ -60,11 +60,6 @@ namespace XazeCustomRoles
             owner.MaxHealth = MaxHealth;
             owner.Health = MaxHealth;
 
-            if (this is ISpawnBroadcast spawn)
-            {
-                owner.SendBroadcast(spawn.SpawnBroadcast, spawn.BroadcastDuration, Broadcast.BroadcastFlags.Normal, spawn.ClearPrevious);
-            }
-
             if (this is ICustomNameRole)
             {
                 owner.CustomInfo = RoleName;
@@ -77,6 +72,21 @@ namespace XazeCustomRoles
             {
                 Owner?.CustomInfo = null;
             }
+        }
+
+        public virtual void GiveCustomItems()
+        {
+            if (this is not ISpawnBroadcast spawn)
+            {
+                return;
+            }
+            
+            Owner?.SendBroadcast(spawn.SpawnBroadcast, spawn.BroadcastDuration, Broadcast.BroadcastFlags.Normal, spawn.ClearPrevious);
+        }
+
+        public virtual bool OnDying(PlayerDyingEventArgs args)
+        {
+            return true;
         }
     }
 }

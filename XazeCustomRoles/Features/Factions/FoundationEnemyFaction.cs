@@ -11,9 +11,10 @@ using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features.Factions;
 
-public class FoundationEnemyFaction : ICustomFaction
+public class FoundationEnemyFaction : BaseGameFaction
 {
-    public string DisplayName => "Foundation Enemy";
-    public string FactionId => nameof(Faction.FoundationEnemy);
-    public Faction BaseGameFaction =>  Faction.FoundationEnemy;
+    public override string DisplayName => "Foundation Enemy";
+    public override string FactionId => nameof(Faction.FoundationEnemy);
+    public override int WinningWeight => 1;
+    public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.ChaosInsurgency;
 }

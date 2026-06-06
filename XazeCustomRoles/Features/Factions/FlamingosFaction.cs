@@ -5,15 +5,15 @@
 // //
 // // I <3 🦈s :3c
 
-using LabApi.Features.Wrappers;
 using PlayerRoles;
 using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features.Factions;
 
-public class FlamingosFaction : ICustomFaction
+public class FlamingosFaction : BaseGameFaction
 {
-    public string DisplayName => "Flamingos";
-    public string FactionId => nameof(Faction.Flamingos);
-    public Faction BaseGameFaction => Faction.Flamingos;
+    public override string DisplayName => "Flamingos";
+    public override string FactionId => nameof(Faction.Flamingos);
+    public override int WinningWeight => 2;
+    public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.Flamingos;
 }

@@ -13,5 +13,6 @@ public interface ICustomFaction
 {
     public string DisplayName { get; }
     public string FactionId { get; }
-    public Faction BaseGameFaction { get; }
+    public int WinningWeight { get; }
+    public RoundSummary.LeadingTeam WinTeam { get; }
 }

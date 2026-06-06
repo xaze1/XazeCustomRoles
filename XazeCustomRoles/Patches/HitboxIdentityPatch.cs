@@ -17,7 +17,7 @@ namespace XazeCustomRoles.Patches
     {
         public static bool Prefix(ref ReferenceHub attacker, ref ReferenceHub victim, ref bool __result)
         {
-            if (AudioManager.ActiveFakes.Contains(victim))
+            if (FakeManager.ActiveFakes.Contains(victim))
             {
                 __result = false;
                 return false;
