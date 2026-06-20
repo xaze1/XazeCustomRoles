@@ -5,11 +5,11 @@
 // //
 // // I <3 🦈s :3c
 
-using PlayerRoles.Voice;
+using System;
 
 namespace XazeCustomRoles.Interfaces;
 
 public interface ICustomVoiceModule
 {
-    public VoiceModuleBase VoiceModule { get; }
+    public Type VoiceModuleType { get; }
 }

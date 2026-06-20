@@ -14,12 +14,14 @@ using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using PlayerRoles.PlayableScps;
 using PlayerRoles.PlayableScps.Scp049;
+using PlayerRoles.Voice;
 using UnityEngine;
 using XazeAPI.API.AudioCore.FakePlayers;
 using XazeAPI.API.Helpers;
 using XazeCustomRoles.Extensions;
 using XazeCustomRoles.Features.Teams;
 using XazeCustomRoles.Interfaces;
+using Object = UnityEngine.Object;
 
 namespace XazeCustomRoles.Features
 {
@@ -100,9 +102,9 @@ namespace XazeCustomRoles.Features
             if (!spawnFlags.HasFlag(RoleSpawnFlags.UseSpawnpoint) || roleInstance.Spawnpoint == null ||
                 !roleInstance.Spawnpoint.TryGetSpawnpoint(out Vector3 spawnPos, out float spawnRot)) return;
 
-            if (roleInstance is ICustomVoiceModule cvm && plr.RoleBase is FpcStandardRoleBase fpc)
+            if (roleInstance is ICustomVoiceModule cvm && plr.RoleBase is FpcStandardRoleBase fpc && cvm.VoiceModuleType.IsSubclassOf(typeof(VoiceModuleBase)))
             {
-                fpc.VoiceModule = cvm.VoiceModule;
+                fpc.gameObject.AddComponent(cvm.VoiceModuleType);
             }
             
             plr.Position = spawnPos;
@@ -121,6 +123,11 @@ namespace XazeCustomRoles.Features
             if (!manager._anySet)
             {
                 return;
+            }
+            
+            if (manager.CurrentRole is ICustomVoiceModule cvm && plr.RoleBase is FpcStandardRoleBase fpc && cvm.VoiceModuleType.IsSubclassOf(typeof(VoiceModuleBase)))
+            {
+                Destroy(fpc.gameObject.GetComponent(cvm.VoiceModuleType));
             }
 
             manager.CurrentRole.DisableRole();
