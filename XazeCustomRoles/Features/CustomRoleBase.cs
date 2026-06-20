@@ -7,7 +7,6 @@
 
 using System.Drawing;
 using InventorySystem;
-using JetBrains.Annotations;
 using LabApi.Events.Arguments.PlayerEvents;
 using LabApi.Features.Wrappers;
 using PlayerRoles;
@@ -16,7 +15,7 @@ using PlayerStatsSystem;
 using XazeCustomRoles.Features.Teams;
 using XazeCustomRoles.Interfaces;
 
-namespace XazeCustomRoles
+namespace XazeCustomRoles.Features
 {
     public abstract class CustomRoleBase : IHealthbarRole
     {
@@ -45,7 +44,7 @@ namespace XazeCustomRoles
 
         // Starting Variables
         public abstract InventoryRoleInfo StartingInventory { get; }
-        public abstract ISpawnpointHandler Spawnpoint { get; }
+        public abstract ISpawnpointHandler? Spawnpoint { get; }
 
         // Player
         public ReferenceHub LastOwner => BaseRole._lastOwner;

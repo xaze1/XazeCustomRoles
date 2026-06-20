@@ -7,9 +7,13 @@
 
 using System;
 using System.Collections.Generic;
+using Interactables.Interobjects.DoorUtils;
 using InventorySystem;
 using LabApi.Features.Wrappers;
 using PlayerRoles;
+using PlayerRoles.FirstPersonControl;
+using PlayerRoles.PlayableScps;
+using PlayerRoles.PlayableScps.Scp049;
 using UnityEngine;
 using XazeAPI.API.AudioCore.FakePlayers;
 using XazeAPI.API.Helpers;
@@ -28,7 +32,7 @@ namespace XazeCustomRoles.Features
         public CustomRoleBase _curRole;
         public bool _anySet;
 
-        public CustomRoleBase CurrentRole
+        public CustomRoleBase? CurrentRole
         {
             get
             {
@@ -95,6 +99,11 @@ namespace XazeCustomRoles.Features
 
             if (!spawnFlags.HasFlag(RoleSpawnFlags.UseSpawnpoint) || roleInstance.Spawnpoint == null ||
                 !roleInstance.Spawnpoint.TryGetSpawnpoint(out Vector3 spawnPos, out float spawnRot)) return;
+
+            if (roleInstance is ICustomVoiceModule cvm && plr.RoleBase is FpcStandardRoleBase fpc)
+            {
+                fpc.VoiceModule = cvm.VoiceModule;
+            }
             
             plr.Position = spawnPos;
             plr.LookRotation = new Vector2(0, spawnRot);
@@ -104,7 +113,7 @@ namespace XazeCustomRoles.Features
 
         public static void DisableRole(Player plr)
         {
-            if (!TryGet(plr?.ReferenceHub, out var manager))
+            if (!TryGet(plr, out var manager))
             {
                 return;
             }

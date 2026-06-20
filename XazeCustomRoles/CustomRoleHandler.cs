@@ -14,6 +14,7 @@ using PlayerStatsSystem;
 using XazeCustomRoles.Features;
 using XazeCustomRoles.Features.Factions;
 using XazeCustomRoles.Interfaces;
+using XazeCustomRoles.Patches;
 
 namespace XazeCustomRoles
 {
@@ -23,6 +24,7 @@ namespace XazeCustomRoles
         static CustomRoleHandler()
         {
             Instance = new();
+            WinningFaction = new UnclassifiedFaction();
         }
 
         private static bool RoundCanEnd;
@@ -69,7 +71,7 @@ namespace XazeCustomRoles
                 return;
             }
 
-            if (CustomRoleManager.TryGet(ev.Player, out var manager) &&
+            if (CustomRoleManager.TryGet(ev.Player, out var manager) && manager._anySet &&
                 !manager.CurrentRole.OnDying(ev))
                 return;
 
@@ -118,6 +120,11 @@ namespace XazeCustomRoles
             
             //Logging.Debug("AlivePlayers:", alivePlayers.Count, "| AliveFactions:", aliveFactions.Count, "| RoundCanEnd:", outcome, "| WinningFaction:", winningFaction, "| WinTeam:", winningFaction?.WinTeam?? RoundSummary.LeadingTeam.Draw);
             return outcome;
+        }
+
+        public override void OnServerWaitingForPlayers()
+        {
+            FootprintPatch.SavedRoles.Clear();
         }
     }
 }
