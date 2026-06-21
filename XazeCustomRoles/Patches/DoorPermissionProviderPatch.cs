@@ -12,7 +12,12 @@ using XazeCustomRoles.Features;
 namespace XazeCustomRoles.Patches;
 
 [HarmonyPatchCategory(Loader.CustomRolesPatchGroup)]
-[HarmonyPatch(typeof(DoorPermissionsPolicy), nameof(DoorPermissionsPolicy.CheckPermissions), [typeof(ReferenceHub), typeof(IDoorPermissionRequester), typeof(PermissionUsed)])]
+[HarmonyPatch(
+    typeof(DoorPermissionsPolicy), 
+    nameof(DoorPermissionsPolicy.CheckPermissions), 
+    [typeof(ReferenceHub), typeof(IDoorPermissionRequester), typeof(PermissionUsed)],
+    [ArgumentType.Normal,ArgumentType.Normal, ArgumentType.Out]
+    )]
 public class DoorPermissionProviderPatch
 {
     public static bool Prefix(DoorPermissionsPolicy __instance, ReferenceHub hub, IDoorPermissionRequester requester, ref PermissionUsed callback, ref bool __result)

@@ -7,13 +7,10 @@
 
 using System;
 using System.Collections.Generic;
-using Interactables.Interobjects.DoorUtils;
 using InventorySystem;
 using LabApi.Features.Wrappers;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
-using PlayerRoles.PlayableScps;
-using PlayerRoles.PlayableScps.Scp049;
 using PlayerRoles.Voice;
 using UnityEngine;
 using XazeAPI.API.AudioCore.FakePlayers;
@@ -21,7 +18,6 @@ using XazeAPI.API.Helpers;
 using XazeCustomRoles.Extensions;
 using XazeCustomRoles.Features.Teams;
 using XazeCustomRoles.Interfaces;
-using Object = UnityEngine.Object;
 
 namespace XazeCustomRoles.Features
 {
@@ -30,8 +26,8 @@ namespace XazeCustomRoles.Features
         public static readonly Dictionary<uint, CustomRoleManager> ActiveManagers = new();
 
         public bool _hubSet;
-        public ReferenceHub _hub;
-        public CustomRoleBase _curRole;
+        public ReferenceHub? _hub;
+        public CustomRoleBase? _curRole;
         public bool _anySet;
 
         public CustomRoleBase? CurrentRole
@@ -60,7 +56,7 @@ namespace XazeCustomRoles.Features
                 {
                     _hubSet = true;
                 }
-                return _hub;
+                return _hub!;
             }
         }
 
@@ -73,7 +69,7 @@ namespace XazeCustomRoles.Features
 
             if (manager._anySet)
             {
-                manager.CurrentRole.DisableRole();
+                manager.CurrentRole?.DisableRole();
                 manager._anySet = false;
                 manager._curRole = null;
             }

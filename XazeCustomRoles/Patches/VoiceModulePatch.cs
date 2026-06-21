@@ -19,7 +19,7 @@ public class VoiceModulePatch
 {
     public static bool Prefix(FpcStandardRoleBase __instance, ref VoiceModuleBase __result)
     {
-        if (!CustomRoleManager.TryGet(__result.Owner, out var manager) || manager.CurrentRole is not ICustomVoiceModule cvm || cvm.VoiceModuleType.IsSubclassOf(typeof(VoiceModuleBase)))
+        if (!__instance.TryGetOwner(out var hub) || !CustomRoleManager.TryGet(hub, out var manager) || manager.CurrentRole is not ICustomVoiceModule cvm || !cvm.VoiceModuleType.IsSubclassOf(typeof(VoiceModuleBase)))
             return true;
         
         __result = __result.gameObject.GetComponent<VoiceModuleBase>();
