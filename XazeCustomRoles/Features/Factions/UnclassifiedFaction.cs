@@ -5,16 +5,21 @@
 // //
 // // I <3 🦈s :3c
 
-using LabApi.Features.Wrappers;
+using System.Drawing;
 using PlayerRoles;
-using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features.Factions;
 
 public class UnclassifiedFaction : BaseGameFaction
 {
     public override string DisplayName => "Unclassified";
+    public override Color DisplayColor => Color.Gray;
     public override string FactionId => nameof(Faction.Unclassified);
     public override int WinningWeight => 0;
     public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.Draw;
+
+    public override string GetCassieName(int count)
+    {
+        return "UNKNOWN";
+    }
 }

@@ -5,16 +5,21 @@
 // //
 // // I <3 🦈s :3c
 
-using LabApi.Features.Wrappers;
+using System.Drawing;
 using PlayerRoles;
-using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features.Factions;
 
 public class FoundationStaffFaction : BaseGameFaction
 {
     public override string DisplayName => "Foundation Staff";
+    public override Color DisplayColor => Color.CornflowerBlue;
     public override string FactionId => nameof(Faction.FoundationStaff);
     public override int WinningWeight => 1;
     public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.FacilityForces;
+
+    public override string GetCassieName(int count)
+    {
+        return "NINETAILEDFOX";
+    }
 }

@@ -12,9 +12,12 @@ namespace XazeCustomRoles.Interfaces;
 public interface ICustomTeam
 {
     public string DisplayName { get; }
+    public System.Drawing.Color DisplayColor { get; }
     public string TeamId { get; }
+    
     public Team BaseGameTeam { get; }
     public ICustomFaction Faction { get; }
     
     public bool IsHostileTo(ICustomTeam other);
+    public string GetCassieName(int count);
 }

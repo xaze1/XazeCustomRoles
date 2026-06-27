@@ -5,6 +5,7 @@
 // //
 // // I <3 🦈s :3c
 
+using System.Drawing;
 using PlayerRoles;
 using XazeCustomRoles.Features.Factions;
 using XazeCustomRoles.Interfaces;
@@ -14,7 +15,13 @@ namespace XazeCustomRoles.Features.Teams;
 public class ScientistsTeam : CustomTeamBase
 {
     public override string DisplayName => "Scientists";
+    public override Color DisplayColor => Color.Yellow;
     public override string TeamId =>  nameof(Team.Scientists);
     public override Team BaseGameTeam => Team.Scientists;
     public override ICustomFaction Faction => new FoundationStaffFaction();
+
+    public override string GetCassieName(int count)
+    {
+        return count == 1? "SCIENTIST" : "SCIENTISTS";
+    }
 }

@@ -5,16 +5,21 @@
 // //
 // // I <3 🦈s :3c
 
-using LabApi.Features.Wrappers;
+using System.Drawing;
 using PlayerRoles;
-using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features.Factions;
 
 public class SCPFaction : BaseGameFaction
 {
     public override string DisplayName => "SCP";
+    public override Color DisplayColor => Color.Red;
     public override string FactionId => nameof(Faction.SCP);
     public override int WinningWeight => 2;
     public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.Anomalies;
+
+    public override string GetCassieName(int count)
+    {
+        return "SCP " + (count == 1? "SUBJECT" : "SUBJECTS");
+    }
 }

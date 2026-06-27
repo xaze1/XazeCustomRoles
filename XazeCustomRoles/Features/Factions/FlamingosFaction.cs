@@ -5,15 +5,21 @@
 // //
 // // I <3 🦈s :3c
 
+using System.Drawing;
 using PlayerRoles;
-using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features.Factions;
 
 public class FlamingosFaction : BaseGameFaction
 {
     public override string DisplayName => "Flamingos";
+    public override Color DisplayColor => Color.DeepPink;
     public override string FactionId => nameof(Faction.Flamingos);
     public override int WinningWeight => 2;
     public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.Flamingos;
+
+    public override string GetCassieName(int count)
+    {
+        return count == 1? "FLAMINGO" : "FLAMINGOS";
+    }
 }

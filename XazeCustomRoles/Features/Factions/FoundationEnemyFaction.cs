@@ -5,16 +5,21 @@
 // //
 // // I <3 🦈s :3c
 
-using LabApi.Features.Wrappers;
+using System.Drawing;
 using PlayerRoles;
-using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features.Factions;
 
 public class FoundationEnemyFaction : BaseGameFaction
 {
     public override string DisplayName => "Foundation Enemy";
+    public override Color DisplayColor => Color.Green;
     public override string FactionId => nameof(Faction.FoundationEnemy);
     public override int WinningWeight => 1;
     public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.ChaosInsurgency;
+
+    public override string GetCassieName(int count)
+    {
+        return "CHAOSINSURGENCY";
+    }
 }

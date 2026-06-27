@@ -12,7 +12,10 @@ namespace XazeCustomRoles.Features.Factions;
 public abstract class BaseGameFaction : ICustomFaction
 {
     public abstract string DisplayName { get; }
+    public abstract System.Drawing.Color DisplayColor { get; }
     public abstract string FactionId { get; }
     public abstract int WinningWeight { get; }
     public abstract RoundSummary.LeadingTeam WinTeam { get; }
+    
+    public abstract string GetCassieName(int count);
 }

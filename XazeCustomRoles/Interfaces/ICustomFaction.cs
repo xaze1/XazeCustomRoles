@@ -5,14 +5,16 @@
 // //
 // // I <3 🦈s :3c
 
-using PlayerRoles;
-
 namespace XazeCustomRoles.Interfaces;
 
 public interface ICustomFaction
 {
     public string DisplayName { get; }
+    public System.Drawing.Color DisplayColor { get; }
+    
     public string FactionId { get; }
     public int WinningWeight { get; }
     public RoundSummary.LeadingTeam WinTeam { get; }
+
+    public string GetCassieName(int count);
 }

@@ -22,7 +22,7 @@ public class VoiceModulePatch
         if (!__instance.TryGetOwner(out var hub) || !CustomRoleManager.TryGet(hub, out var manager) || manager.CurrentRole is not ICustomVoiceModule cvm || !cvm.VoiceModuleType.IsSubclassOf(typeof(VoiceModuleBase)))
             return true;
         
-        __result = __result.gameObject.GetComponent<VoiceModuleBase>();
+        __result = __instance.gameObject.GetComponent<VoiceModuleBase>();
         return false;
     }
 }
