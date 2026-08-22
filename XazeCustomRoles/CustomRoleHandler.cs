@@ -10,7 +10,7 @@ using LabApi.Events.Arguments.PlayerEvents;
 using LabApi.Events.Arguments.ServerEvents;
 using LabApi.Events.CustomHandlers;
 using LabApi.Features.Wrappers;
-using PlayerStatsSystem;
+using PlayerRoles;
 using XazeCustomRoles.Features;
 using XazeCustomRoles.Features.Factions;
 using XazeCustomRoles.Interfaces;
@@ -71,8 +71,7 @@ namespace XazeCustomRoles
                 return;
             }
 
-            if (CustomRoleManager.TryGet(ev.Player, out var manager) && manager._anySet &&
-                !manager.CurrentRole.OnDying(ev))
+            if (CustomRoleManager.TryGet(ev.Player, out var manager) && manager._anySet && !manager.CurrentRole!.OnDying(ev))
                 return;
 
             CustomRoleManager.DisableRole(ev.Player);
@@ -111,12 +110,17 @@ namespace XazeCustomRoles
 
         private static bool ShouldEndRound(out ICustomFaction winningFaction)
         {
-            var alivePlayers = Player.ReadyList.Where(p => p.IsAlive).ToList();
+            var alivePlayers = Player.ReadyList.Where(p => p.IsAlive && (p.Role != RoleTypeId.Tutorial || CustomRoleManager.IsCustomRole(p))).ToList();
             var aliveFactions = alivePlayers.Select(p => CustomRoleManager.GetTeam(p).Faction).Distinct(new FactionComparer()).ToList();
 
-            winningFaction = aliveFactions.OrderByDescending(f => f.WinningWeight).FirstOrDefault();
-            var outcome =
-                !alivePlayers.Any(p1 => alivePlayers.Any(p2 => p1 != p2 && CustomRoleManager.IsEnemy(p1, p2)));
+            if (aliveFactions.Count == 0)
+            {
+                winningFaction = new UnclassifiedFaction();
+                return true;
+            }
+
+            winningFaction = aliveFactions.OrderByDescending(f => f.WinningWeight).First();
+            var outcome = !alivePlayers.Any(p1 => alivePlayers.Any(p2 => p1 != p2 && CustomRoleManager.IsEnemy(p1, p2)));
             
             //Logging.Debug("AlivePlayers:", alivePlayers.Count, "| AliveFactions:", aliveFactions.Count, "| RoundCanEnd:", outcome, "| WinningFaction:", winningFaction, "| WinTeam:", winningFaction?.WinTeam?? RoundSummary.LeadingTeam.Draw);
             return outcome;
