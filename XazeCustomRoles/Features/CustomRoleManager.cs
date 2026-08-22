@@ -60,12 +60,14 @@ namespace XazeCustomRoles.Features
             }
         }
 
-        public static void SetRole<T>(Player plr, RoleChangeReason reason, RoleSpawnFlags spawnFlags) where T : CustomRoleBase
+        public static void SetRole<T>(Player plr, RoleChangeReason reason, RoleSpawnFlags spawnFlags) where T : CustomRoleBase => SetRole(typeof(T), plr, reason, spawnFlags);
+        public static void SetRole(Type roleType, Player plr, RoleChangeReason reason, RoleSpawnFlags spawnFlags)
         {
+            if (!typeof(CustomRoleBase).IsAssignableFrom(roleType))
+                throw new ArgumentException(nameof(roleType) + " must be of type CustomRoleBase");
+            
             if (!TryGet(plr.ReferenceHub, out var manager))
-            {
                 return;
-            }
 
             if (manager._anySet)
             {
@@ -74,7 +76,7 @@ namespace XazeCustomRoles.Features
                 manager._curRole = null;
             }
 
-            T roleInstance = Activator.CreateInstance<T>();
+            CustomRoleBase roleInstance = (CustomRoleBase)Activator.CreateInstance(roleType);
             plr.SetRole(roleInstance.Role, reason, RoleSpawnFlags.None);
             manager.CurrentRole = roleInstance;
             roleInstance.Init(plr, plr.RoleBase);
@@ -107,7 +109,8 @@ namespace XazeCustomRoles.Features
             plr.LookRotation = new Vector2(0, spawnRot);
         }
 
-        public static void SetRole<T>(ReferenceHub hub, RoleChangeReason reason, RoleSpawnFlags spawnFlags) where T : CustomRoleBase => SetRole<T>(Player.Get(hub), reason, spawnFlags);
+        public static void SetRole(Type roleType, ReferenceHub hub, RoleChangeReason reason, RoleSpawnFlags spawnFlags) => SetRole(roleType, Player.Get(hub), reason, spawnFlags);
+        public static void SetRole<T>(ReferenceHub hub, RoleChangeReason reason, RoleSpawnFlags spawnFlags) where T : CustomRoleBase => SetRole(typeof(T), Player.Get(hub), reason, spawnFlags);
 
         public static void DisableRole(Player plr)
         {

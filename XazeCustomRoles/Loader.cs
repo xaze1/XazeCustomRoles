@@ -24,7 +24,7 @@ public class Loader : Plugin
     public override string Name => "Xaze-CustomRoles";
     public override string Description => "Custom Roles API for SL";
     public override string Author => "xaze_";
-    public override Version Version => new(1, 2, 0);
+    public override Version Version => new(1, 2, 1);
     public override Version RequiredApiVersion => new(LabApiProperties.CompiledVersion);
     
     public const string CustomRolesPatchGroup = "XAZE-CustomRoles";
