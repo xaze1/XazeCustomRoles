@@ -20,8 +20,13 @@ public class ScientistsTeam : CustomTeamBase
     public override Team BaseGameTeam => Team.Scientists;
     public override ICustomFaction Faction => new FoundationStaffFaction();
 
-    public override string GetCassieName(int count)
+    public override string GetTTSName(int count)
     {
         return count == 1? "SCIENTIST" : "SCIENTISTS";
+    }
+
+    public override string GetSubtitleName(int count)
+    {
+        return count == 1? "Scientist" : "Scientists";
     }
 }

@@ -18,7 +18,12 @@ public class FlamingosFaction : BaseGameFaction
     public override int WinningWeight => 2;
     public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.Flamingos;
 
-    public override string GetCassieName(int count)
+    public override string GetSubtitleName(int count)
+    {
+        return count == 1? "Flamingo" : "Flamingos";
+    }
+
+    public override string GetTTSName(int count)
     {
         return count == 1? "FLAMINGO" : "FLAMINGOS";
     }

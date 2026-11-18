@@ -11,7 +11,7 @@ using LabApi.Events.CustomHandlers;
 using LabApi.Features;
 using LabApi.Loader.Features.Plugins;
 using MEC;
-using XazeAPI.API;
+using XazeAPI.Features;
 using XazeAPI.API.AudioCore.FakePlayers;
 using XazeAPI.API.Events;
 using XazeAPI.API.Events.Handler;
@@ -24,7 +24,7 @@ public class Loader : Plugin
     public override string Name => "Xaze-CustomRoles";
     public override string Description => "Custom Roles API for SL";
     public override string Author => "xaze_";
-    public override Version Version => new(1, 2, 1);
+    public override Version Version => new(1, 2, 2);
     public override Version RequiredApiVersion => new(LabApiProperties.CompiledVersion);
     
     public const string CustomRolesPatchGroup = "XAZE-CustomRoles";

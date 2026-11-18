@@ -9,7 +9,7 @@ using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features.Factions;
 
-public abstract class BaseGameFaction : ICustomFaction
+public abstract class BaseGameFaction : ICustomFaction, IAnnounceable
 {
     public abstract string DisplayName { get; }
     public abstract System.Drawing.Color DisplayColor { get; }
@@ -17,5 +17,6 @@ public abstract class BaseGameFaction : ICustomFaction
     public abstract int WinningWeight { get; }
     public abstract RoundSummary.LeadingTeam WinTeam { get; }
     
-    public abstract string GetCassieName(int count);
+    public abstract string GetSubtitleName(int count);
+    public abstract string GetTTSName(int count);
 }

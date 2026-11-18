@@ -11,7 +11,7 @@ using XazeCustomRoles.Interfaces;
 
 namespace XazeCustomRoles.Features;
 
-public abstract class CustomTeamBase : ICustomTeam
+public abstract class CustomTeamBase : ICustomTeam, IAnnounceable
 {
     public abstract string DisplayName { get; }
     public virtual Color DisplayColor => Faction.DisplayColor;
@@ -25,5 +25,23 @@ public abstract class CustomTeamBase : ICustomTeam
         return Faction.FactionId != other.Faction.FactionId;
     }
     
-    public virtual string GetCassieName(int count) => Faction.GetCassieName(count);
+    public virtual string GetSubtitleName(int count)
+    {
+        if (Faction is IAnnounceable announceable)
+        {
+            return announceable.GetSubtitleName(count);
+        }
+        
+        return "Unknown";
+    }
+
+    public virtual string GetTTSName(int count)
+    {
+        if (Faction is IAnnounceable announceable)
+        {
+            return announceable.GetTTSName(count);
+        }
+        
+        return "UNKNOWN";
+    }
 }

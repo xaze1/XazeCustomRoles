@@ -18,7 +18,12 @@ public class FoundationEnemyFaction : BaseGameFaction
     public override int WinningWeight => 1;
     public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.ChaosInsurgency;
 
-    public override string GetCassieName(int count)
+    public override string GetSubtitleName(int count)
+    {
+        return "Chaos Insurgency";
+    }
+
+    public override string GetTTSName(int count)
     {
         return "CHAOSINSURGENCY";
     }

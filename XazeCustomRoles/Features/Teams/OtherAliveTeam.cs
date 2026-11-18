@@ -22,8 +22,13 @@ public class OtherAliveTeam : CustomTeamBase
     
     public override ICustomFaction Faction => new UnclassifiedFaction();
 
-    public override string GetCassieName(int count)
+    public override string GetTTSName(int count)
     {
         return "UNKNOWN PERSONNEL";
+    }
+
+    public override string GetSubtitleName(int count)
+    {
+        return "Unknown Personnel";
     }
 }

@@ -18,8 +18,13 @@ public class UnclassifiedFaction : BaseGameFaction
     public override int WinningWeight => 0;
     public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.Draw;
 
-    public override string GetCassieName(int count)
+    public override string GetTTSName(int count)
     {
         return "UNKNOWN";
+    }
+
+    public override string GetSubtitleName(int count)
+    {
+        return "Unknown";
     }
 }

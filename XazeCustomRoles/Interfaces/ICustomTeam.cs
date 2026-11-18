@@ -19,5 +19,4 @@ public interface ICustomTeam
     public ICustomFaction Faction { get; }
     
     public bool IsHostileTo(ICustomTeam other);
-    public string GetCassieName(int count);
 }

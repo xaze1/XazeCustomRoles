@@ -24,11 +24,12 @@ namespace XazeCustomRoles
         static CustomRoleHandler()
         {
             Instance = new();
-            WinningFaction = new UnclassifiedFaction();
+            _winningFaction = new UnclassifiedFaction();
         }
 
         private static bool RoundCanEnd;
-        private static ICustomFaction WinningFaction;
+        public static ICustomFaction WinningFaction => _winningFaction;
+        private static ICustomFaction _winningFaction;
         
         public override void OnServerRoundEnding(RoundEndingEventArgs ev)
         {
@@ -61,7 +62,7 @@ namespace XazeCustomRoles
                 return;
             }
             
-            RoundCanEnd = ShouldEndRound(out WinningFaction);
+            RoundCanEnd = ShouldEndRound(out _winningFaction);
         }
 
         public override void OnPlayerDying(PlayerDyingEventArgs ev)
@@ -84,7 +85,7 @@ namespace XazeCustomRoles
                 return;
             }
             
-            RoundCanEnd = ShouldEndRound(out WinningFaction);
+            RoundCanEnd = ShouldEndRound(out _winningFaction);
         }
 
         public override void OnPlayerSpawned(PlayerSpawnedEventArgs ev)
@@ -94,7 +95,7 @@ namespace XazeCustomRoles
                 return;
             }
 
-            RoundCanEnd = ShouldEndRound(out WinningFaction);
+            RoundCanEnd = ShouldEndRound(out _winningFaction);
         }
 
         public override void OnPlayerLeft(PlayerLeftEventArgs ev)
@@ -105,7 +106,7 @@ namespace XazeCustomRoles
             }
             
             CustomRoleManager.DisableRole(ev.Player);
-            RoundCanEnd = ShouldEndRound(out WinningFaction);
+            RoundCanEnd = ShouldEndRound(out _winningFaction);
         }
 
         private static bool ShouldEndRound(out ICustomFaction winningFaction)

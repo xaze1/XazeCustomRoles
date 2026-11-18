@@ -18,8 +18,13 @@ public class SCPFaction : BaseGameFaction
     public override int WinningWeight => 2;
     public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.Anomalies;
 
-    public override string GetCassieName(int count)
+    public override string GetSubtitleName(int count)
     {
-        return "SCP " + (count == 1? "SUBJECT" : "SUBJECTS");
+        return "SCP " + (count == 1 ? "Subject" : "Subjects");
+    }
+
+    public override string GetTTSName(int count)
+    {
+        return "SCP" + (count == 1 ? "SUBJECT" : "SUBJECTS");
     }
 }

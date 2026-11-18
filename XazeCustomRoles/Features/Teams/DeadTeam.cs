@@ -22,4 +22,14 @@ public class DeadTeam : CustomTeamBase
     {
         return false;
     }
+
+    public override string GetSubtitleName(int count)
+    {
+        return "Unclassified";
+    }
+    
+    public override string GetTTSName(int count)
+    {
+        return "UNKNOWN";
+    }
 }

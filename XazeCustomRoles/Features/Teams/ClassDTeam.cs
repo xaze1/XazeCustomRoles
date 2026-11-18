@@ -20,8 +20,13 @@ public class ClassDTeam : CustomTeamBase
     public override Team BaseGameTeam => Team.ClassD;
     public override ICustomFaction Faction => new FoundationEnemyFaction();
 
-    public override string GetCassieName(int count)
+    public override string GetTTSName(int count)
     {
         return "CLASS D PERSONNEL";
+    }
+
+    public override string GetSubtitleName(int count)
+    {
+        return "Class-D Personnel";
     }
 }

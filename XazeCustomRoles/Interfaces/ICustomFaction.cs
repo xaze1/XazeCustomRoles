@@ -15,6 +15,4 @@ public interface ICustomFaction
     public string FactionId { get; }
     public int WinningWeight { get; }
     public RoundSummary.LeadingTeam WinTeam { get; }
-
-    public string GetCassieName(int count);
 }

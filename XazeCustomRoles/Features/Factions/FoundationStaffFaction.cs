@@ -18,8 +18,13 @@ public class FoundationStaffFaction : BaseGameFaction
     public override int WinningWeight => 1;
     public override RoundSummary.LeadingTeam WinTeam => RoundSummary.LeadingTeam.FacilityForces;
 
-    public override string GetCassieName(int count)
+    public override string GetSubtitleName(int count)
     {
-        return "NINETAILEDFOX";
+        return count == 1? "Foundation Force" : "Foundation Forces";
+    }
+
+    public override string GetTTSName(int count)
+    {
+        return count == 1? "FOUNDATION FORCE" : "FOUNDATION FORCES";
     }
 }

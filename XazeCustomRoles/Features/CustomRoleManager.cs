@@ -10,11 +10,9 @@ using System.Collections.Generic;
 using InventorySystem;
 using LabApi.Features.Wrappers;
 using PlayerRoles;
-using PlayerRoles.FirstPersonControl;
-using PlayerRoles.Voice;
 using UnityEngine;
 using XazeAPI.API.AudioCore.FakePlayers;
-using XazeAPI.API.Helpers;
+using XazeAPI.Features.Helpers;
 using XazeCustomRoles.Extensions;
 using XazeCustomRoles.Features.Teams;
 using XazeCustomRoles.Interfaces;
@@ -35,9 +33,7 @@ namespace XazeCustomRoles.Features
             get
             {
                 if (!_anySet)
-                {
                     return null;
-                }
 
                 return _curRole;
             }
@@ -53,9 +49,7 @@ namespace XazeCustomRoles.Features
             get
             {
                 if (!_hubSet && ReferenceHub.TryGetHub(gameObject, out _hub))
-                {
                     _hubSet = true;
-                }
                 return _hub!;
             }
         }
@@ -77,7 +71,7 @@ namespace XazeCustomRoles.Features
             }
 
             CustomRoleBase roleInstance = (CustomRoleBase)Activator.CreateInstance(roleType);
-            plr.SetRole(roleInstance.Role, reason, RoleSpawnFlags.None);
+            plr.SetRole(roleInstance.Role, reason, RoleSpawnFlags.UseSpawnpoint);
             manager.CurrentRole = roleInstance;
             roleInstance.Init(plr, plr.RoleBase);
 
@@ -86,24 +80,15 @@ namespace XazeCustomRoles.Features
                 plr.ClearItems();
                 Inventory inventory = plr.Inventory;
                 foreach (var keyValuePair in roleInstance.StartingInventory.Ammo)
-                {
                     inventory.ServerSetAmmo(keyValuePair.Key, keyValuePair.Value);
-                }
 
                 foreach (ItemType item in roleInstance.StartingInventory.Items)
-                {
                     plr.GiveFirearmWithAttachments(item);
-                }
                 roleInstance.GiveCustomItems();
             }
 
             if (!spawnFlags.HasFlag(RoleSpawnFlags.UseSpawnpoint) || roleInstance.Spawnpoint == null ||
                 !roleInstance.Spawnpoint.TryGetSpawnpoint(out Vector3 spawnPos, out float spawnRot)) return;
-
-            if (roleInstance is ICustomVoiceModule cvm && plr.RoleBase is FpcStandardRoleBase fpc && cvm.VoiceModuleType.IsSubclassOf(typeof(VoiceModuleBase)))
-            {
-                fpc.gameObject.AddComponent(cvm.VoiceModuleType);
-            }
             
             plr.Position = spawnPos;
             plr.LookRotation = new Vector2(0, spawnRot);
@@ -115,21 +100,12 @@ namespace XazeCustomRoles.Features
         public static void DisableRole(Player plr)
         {
             if (!TryGet(plr, out var manager))
-            {
                 return;
-            }
 
             if (!manager._anySet)
-            {
                 return;
-            }
-            
-            if (manager.CurrentRole is ICustomVoiceModule cvm && plr.RoleBase is FpcStandardRoleBase fpc && cvm.VoiceModuleType.IsSubclassOf(typeof(VoiceModuleBase)))
-            {
-                Destroy(fpc.gameObject.GetComponent(cvm.VoiceModuleType));
-            }
 
-            manager.CurrentRole.DisableRole();
+            manager.CurrentRole!.DisableRole();
             manager._anySet = false;
             manager._curRole = null;
         }
@@ -137,14 +113,10 @@ namespace XazeCustomRoles.Features
         public static void DisableRole(ReferenceHub hub)
         {
             if (!TryGet(hub, out var manager))
-            {
                 return;
-            }
 
             if (!manager._anySet)
-            {
                 return;
-            }
 
             manager.CurrentRole.DisableRole();
             manager._anySet = false;
@@ -154,20 +126,21 @@ namespace XazeCustomRoles.Features
         public static ICustomTeam GetTeam(ReferenceHub player)
         {
             if (player == null || FakeManager.ActiveFakes.Contains(player))
-            {
                 return new DeadTeam();
-            }
 
             if (ActiveManagers.TryGetValue(player.netId, out var manager) && manager._anySet)
-            {
                 return manager.CurrentRole?.Team?? new DeadTeam();
-            }
 
             return player.GetTeam().ToCustomTeam();
         }
         
         public static ICustomTeam GetTeam(Player player) => GetTeam(player.ReferenceHub);
 
+        public static bool IsEnemy(Player attacker, RoleTypeId target) => IsEnemy(attacker.ReferenceHub, target.GetTeam().ToCustomTeam());
+        public static bool IsEnemy(Player attacker, Team target) => IsEnemy(attacker.ReferenceHub, target.ToCustomTeam());
+        public static bool IsEnemy(RoleTypeId attacker, Player target) => IsEnemy(attacker.GetTeam().ToCustomTeam(), target.ReferenceHub);
+        public static bool IsEnemy(Team attacker, Player target) => IsEnemy(attacker.ToCustomTeam(), target.ReferenceHub);
+        
         public static bool IsEnemy(Player attacker, Player target) => IsEnemy(attacker.ReferenceHub, target.ReferenceHub);
         public static bool IsEnemy(Player attacker, ICustomTeam target) => IsEnemy(attacker.ReferenceHub, target);
         public static bool IsEnemy(ICustomTeam attacker, Player target) => IsEnemy(attacker, target.ReferenceHub);
@@ -190,9 +163,7 @@ namespace XazeCustomRoles.Features
         public static bool IsEnemy(ICustomTeam attacker, ICustomTeam target)
         {
             if (attacker is DeadTeam || target is DeadTeam)
-            {
                 return false;
-            }
             
             return attacker.IsHostileTo(target) || target.IsHostileTo(attacker);
         }

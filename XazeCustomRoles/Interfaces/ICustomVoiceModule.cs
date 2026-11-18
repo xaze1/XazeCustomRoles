@@ -5,11 +5,12 @@
 // //
 // // I <3 🦈s :3c
 
-using System;
+using LabApi.Events.Arguments.PlayerEvents;
 
 namespace XazeCustomRoles.Interfaces;
 
 public interface ICustomVoiceModule
 {
-    public Type VoiceModuleType { get; }
+    public void ValidateReceive(PlayerReceivingVoiceMessageEventArgs args);
+    public void ValidateSend(PlayerReceivingVoiceMessageEventArgs args);
 }

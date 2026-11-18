@@ -13,7 +13,7 @@ namespace XazeCustomRoles.Features.Teams;
 
 public class SCPsTeam : CustomTeamBase
 {
-    public override string DisplayName => "SCPs";
+    public override string DisplayName => "SCP";
     public override string TeamId => nameof(Team.SCPs);
     public override Team BaseGameTeam => Team.SCPs;
     public override ICustomFaction Faction => new SCPFaction();
